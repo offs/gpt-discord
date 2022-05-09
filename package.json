@@ -1,0 +1,25 @@
+{
+  "name": "gpt-discord",
+  "version": "1.0.0",
+  "description": "Discord chat bot built using GPT-3",
+  "main": "app.js",
+  "scripts": {
+    "run": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/offs/gpt-discord.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/offs/gpt-discord/issues"
+  },
+  "homepage": "https://github.com/offs/gpt-discord#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "openai": "^2.0.5"
+  }
+}
