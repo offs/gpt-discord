@@ -2,6 +2,26 @@
 
 Discord chat bot build using [OpenAI](openai.com)'s GPT-3
 
+
+## Installing
+
+Clone the repository:
+
+    git clone https://github.com/offs/gpt-discord.git
+
+Install the dependencies:
+
+    npm install
+
+Set the environment variables in .env:
+
+    DISCORD_TOKEN=<your token>
+    OPENAI_API_KEY=<your key>
+
+Run the bot:
+
+    node .
+
 ## Built With
 
   - [OpenAI's API](https://openai.com)
