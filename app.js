@@ -11,21 +11,24 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 client.once('ready', () => {
-	console.log('yoooooo');
+	console.log('Ready to start chatting!');
 });
 
 
 client.on('messageCreate', async msg => {
-  if (msg.author.bot) return; // filtering messages
+  if (msg.author.bot) return; // filtering bad messages
   if (msg.channel.type === 'dm') return;
   if (msg.content.length > 500) return;
+  if (msg.content.length === 0) return;
   if (msg.attachments.size !== 0) return;
+  if (!msg.content.startsWith('<@973207846969806868>')) return;
 
-  console.log(`User ${msg.author.username}'s prompt: ${msg.content}`);
+  let userprompt = msg.content.replace(/<@973207846969806868>/g, '').trim();
+  console.log(`User ${msg.author.username}'s prompt: ${userprompt}`);
 
   (async () => {
     const response = await openai.createCompletion("text-davinci-002", {
-      prompt: "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: "+msg.content,
+      prompt: "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: "+userprompt+'.',
       temperature: 0.9,
       max_tokens: 150,
       top_p: 1,
@@ -39,12 +42,9 @@ client.on('messageCreate', async msg => {
       return;
     }
     console.log(response.data.choices[0]);
-    let responseText = response.data.choices[0].text.replace(/AI: /g, "").replace(/\n/g, "");
+    let responseText = response.data.choices[0].text.replace(/AI:/g, "").replace(/\n/g, "");
     msg.reply(responseText);
   })();
-
-
-  
 });
 
 
