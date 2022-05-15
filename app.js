@@ -26,18 +26,18 @@ client.on('interactionCreate', async interaction => {
     let prompt = await interaction.options.getString('prompt');
     let text = await interaction.options.getString('text');
     if (!prompt){
-      prompt = "The assistant is devious, whimsical, comical, and loves tomfoolery"
+      prompt = "devious, whimsical, comical, and loves tomfoolery"
     }
 
     (async () => {
       const response = await openai.createCompletion("text-davinci-002", {
-        prompt: "The following is a conversation with an AI assistant."+prompt+".\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: "+text+'.',
+        prompt: "The following is a conversation with someome who has the characteristics of, "+prompt+".\n\nUser: Hello, who are you?\nBot: I am a dicord bot. How can I help you today?\nUser: "+text+'.',
         temperature: 0.9,
         max_tokens: 150,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0.6,
-        stop: [" Human:", " AI:"],
+        stop: [" User:", " Bot:"],
       });
       if (response.data.choices[0].text.length === 0) { // TODO: if the response only contains newlines, then reply with a random response
         msg.reply("I'm sorry, I don't understand what you're saying.");
@@ -45,13 +45,12 @@ client.on('interactionCreate', async interaction => {
         return;
       }
       console.log(response.data.choices[0]);
-      let responseText = response.data.choices[0].text.replace(/AI:/g, " ").replace(/\n/g, " "); // TODO: only get text after "AI:"
+      let responseText = response.data.choices[0].text.replace(/Bot:/g, " ").replace(/\n/g, " "); // TODO: only get text after "AI:"
       interaction.reply(responseText);
     })();
 
 
   }
-
 
 });
 
