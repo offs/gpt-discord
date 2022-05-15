@@ -31,7 +31,7 @@ client.on('interactionCreate', async interaction => {
 
     (async () => {
       const response = await openai.createCompletion("text-davinci-002", {
-        prompt: "The following is a conversation with someome who has the characteristics of, "+prompt+".\n\nUser: Hello, who are you?\nBot: I am a dicord bot. How can I help you today?\nUser: "+text+'.',
+        prompt: "The following is a conversation with someome who has the characteristics of, "+prompt+".\n\nUser: Hello, who are you?\nBot: I am a Discord bot. How can I help you today?\nUser: "+text+'.',
         temperature: 0.9,
         max_tokens: 150,
         top_p: 1,
