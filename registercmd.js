@@ -5,7 +5,9 @@ require("dotenv").config();
 
 const commands = [
     new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
-	new SlashCommandBuilder().setName('talk').setDescription('Interact with the AI').addStringOption(option => option.setName('prompt').setRequired(true).setDescription('A short description of how the AI should behave.')).addStringOption(option => option.setName('text').setRequired(true).setDescription('The text to give the AI'))
+	new SlashCommandBuilder().setName('talk').setDescription('Interact with the AI').addStringOption(option => option.setName('text').setRequired(true).setDescription('The text to give the AI')).addStringOption(option => option.setName('prompt').setDescription('A short description of how the AI should behave.')),
+    new SlashCommandBuilder().setName('code').setDescription('Generate code from the AI').addStringOption(option => option.setName('prompt').setRequired(true).setDescription('The code the AI will generate')),
+
 ]
 .map(command => command.toJSON());
 

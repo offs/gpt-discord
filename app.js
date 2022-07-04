@@ -24,14 +24,14 @@ client.on('interactionCreate', async interaction => {
 
   if (interaction.commandName === 'talk') {
     let prompt = await interaction.options.getString('prompt');
+    if (!prompt) prompt = "devious, whimsical, comical, and loves tomfoolery";
     let text = await interaction.options.getString('text');
-    if (!prompt){
-      prompt = "devious, whimsical, comical, and loves tomfoolery"
-    }
+
+    await interaction.reply('I am thinking...');
 
     (async () => {
       const response = await openai.createCompletion("text-davinci-002", {
-        prompt: "The following is a conversation with someome who has the characteristics of, "+prompt+".\n\nUser: Hello, who are you?\nBot: I am a Discord bot. How can I help you today?\nUser: "+text+'.',
+        prompt: "The following is a conversation with someome who has the characteristics of, "+prompt+".\n\nUser: Hello, who are you?\nBot: I am a Discord bot. How can I help you today?\nUser: "+text+'.\n',
         temperature: 0.9,
         max_tokens: 150,
         top_p: 1,
@@ -39,17 +39,45 @@ client.on('interactionCreate', async interaction => {
         presence_penalty: 0.6,
         stop: [" User:", " Bot:"],
       });
-      if (response.data.choices[0].text.length === 0) { // TODO: if the response only contains newlines, then reply with a random response
-        msg.reply("I'm sorry, I don't understand what you're saying.");
-        console.error('OpenAI API returned an empty response.');
-        return;
+      console.log(response.data.choices);
+      let responseText = response.data.choices[0].text.replace(/Bot:|User:|\n/g, "");
+      if (responseText === "") responseText = "I am not sure what you are trying to say.";
+      try {
+        interaction.editReply(responseText);
+      } catch (e) {
+        interaction.editReply('An error occurred');
       }
-      console.log(response.data.choices[0]);
-      let responseText = response.data.choices[0].text.replace(/Bot:/g, " ").replace(/\n/g, " "); // TODO: only get text after "AI:"
-      interaction.reply(responseText);
+        
     })();
+  }
 
-
+  if (interaction.commandName === 'code') {
+    let prompt = await interaction.options.getString('prompt');
+    await interaction.reply('I am thinking...');
+    (async () => {
+      const response = await openai.createCompletion("code-davinci-002", {
+        prompt: '/*'+prompt+': */\n\n',
+        temperature: 0,
+        max_tokens: 1500,
+        top_p: 1,
+        frequency_penalty: 0.3,
+        presence_penalty: 0,
+        stop: ["\n\n\n"]
+      });
+      let responseText = response.data.choices[0].text.replace(/`/g, "");
+      //if there is a + at beginning of a line, remove it
+      responseText = responseText.replace(/^\+/gm, "");
+      // if longer than 2000 characters, edit the reply saying its too long
+      if (responseText.length > 2000) {
+        interaction.editReply('The code is too long to send.');
+      }
+      try {
+        interaction.editReply('```'+responseText+'```');
+      }catch (e) {
+        interaction.editReply('An error occurred');
+      }
+    }
+    )();
   }
 
 });
