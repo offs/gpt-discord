@@ -1,3 +1,5 @@
+# This project is discontinued and will not recieve any updates
+
 # GPT Discord
 
 Discord chat bot build using [OpenAI](openai.com)'s GPT-3
